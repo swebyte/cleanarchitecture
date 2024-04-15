@@ -1,0 +1,60 @@
+﻿@page "/products"
+@using Company.CA.Application.Services
+@using Company.CA.Domain.Models
+@inject IProductService productService
+
+<h3>Products</h3>
+
+@if (products.Count > 0)
+{
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Discount Percentage</th>
+            <th>Rating</th>
+            <th>Stock</th>
+            <th>Brand</th>
+            <th>Category</th>
+            <th>Thumbnail</th>
+            <th>Images</th>
+        </tr>
+        @foreach (var product in products)
+        {
+            <tr>
+                <td>@product.Id</td>
+                <td>@product.Title</td>
+                <td>@product.Description</td>
+                <td>@product.Price</td>
+                <td>@product.DiscountPercentage</td>
+                <td>@product.Rating</td>
+                <td>@product.Stock</td>
+                <td>@product.Brand</td>
+                <td>@product.Category</td>
+                <td><img src="@product.Thumbnail" alt="Thumbnail" width="50" height="50" /></td>
+                <td>
+                    @foreach (var image in product.Images)
+                    {
+                        <img src="@image" alt="Product Image" width="50" height="50" />
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>No products available.</p>
+}
+
+@code {
+    private List<Product> products = new List<Product>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = (await productService.GetAll()).ToList();
+
+    }
+}
